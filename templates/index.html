@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rasa And Flask Chat_Bot</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <style>
+    body {
+      background-image: url('https://img.freepik.com/free-photo/beverage-fast-food-with-copy-space_23-2148242507.jpg?t=st=1733850504~exp=1733854104~hmac=2002a6385fd0eda430b1bfa85d963745df648d3250b03f9f4c0d7cdb876193d0&w=1060'); /* Replace with your image */
+      background-size: cover;
+      background-position: center;
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .middle-heading {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: white;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    }
+
+    .chat-sign-button {
+      width: 60px;
+      height: 60px;
+      font-size: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 50%;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      cursor: pointer;
+    }
+
+    .chat-sign-button i {
+      font-size: 28px;
+    }
+
+    .chat-sign-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container text-center">
+    <!-- Middle heading -->
+    <h1 class="middle-heading">Order Your Food!</h1>
+  </div>
+
+  <!-- Chat widget button -->
+  <button id="chat-widget-button" class="chat-sign-button">
+    <i class="fas fa-comment-dots"></i>
+  </button>
+
+  <!-- Chatbox -->
+  <div id="chat-widget" class="card position-fixed shadow d-none" style="bottom: 100px; right: 20px; width: 300px;">
+    <div class="card-header bg-primary text-white">
+      Chatbot
+      <button id="chat-widget-close-button" type="button" class="btn-close float-end" aria-label="Close"></button>
+    </div>
+    <div class="card-body" id="chat-widget-messages">
+    </div>
+    <div class="card-footer">
+      <input type="text" class="form-control" id="chat-widget-input" placeholder="Type your message...">
+    </div>
+  </div>
+
+  <script>
+    $("#chat-widget-button").on("click", function() {
+      $("#chat-widget").toggleClass("d-none");
+    });
+
+    $("#chat-widget-close-button").on("click", function() {
+      $("#chat-widget").addClass("d-none");
+    });
+
+    $("#chat-widget-input").keypress(function(event) {
+      if (event.which === 13) {
+        let userMessage = $("#chat-widget-input").val();
+        $("#chat-widget-input").val("");
+        $("#chat-widget-messages").append("<div><strong>You:</strong> " + userMessage + "</div>");
+
+        // Send user message to the server and get bot's response
+        $.ajax({
+          type: "POST",
+          url: "/webhook",
+          contentType: "application/json",
+          data: JSON.stringify({ message: userMessage }),
+          success: function(data) {
+            // Retrieve the bot's response from the server's response
+            let botResponse = data.response;
+
+            // Append bot's response to the chatbox
+            $("#chat-widget-messages").append("<div><strong>Bot:</strong> " + botResponse + "</div>");
+          },
+          error: function() {
+            // Handle error if needed
+            $("#chat-widget-messages").append("<div><strong>Bot:</strong> Sorry, something went wrong. Please try again later.</div>");
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
