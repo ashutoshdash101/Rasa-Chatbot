@@ -20,10 +20,3 @@ This is a simple Rasa-based chatbot that can greet users and take food orders. T
    - Accepts the user's choice and confirms the order.
 3. **End the Conversation**: Gracefully ends the conversation after completing the order.
 
----
-
-## Prerequisites 📋
-- **Python**: Ensure Python is installed on your system.
-- **Rasa**: Install Rasa by running:
-  ```bash
-  pip install rasa
