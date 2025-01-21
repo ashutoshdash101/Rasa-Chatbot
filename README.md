@@ -20,3 +20,6 @@ This is a simple Rasa-based chatbot that can greet users and take food orders. T
    - Accepts the user's choice and confirms the order.
 3. **End the Conversation**: Gracefully ends the conversation after completing the order.
 
+## Contact
+For any queries or suggestions, please contact [Ashutosh Dash](mailto:ashutoshpiku1234@gmail.com).
+
